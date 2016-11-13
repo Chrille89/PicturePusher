@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>PicturePusher</display-name>
+
+	<servlet>
+		<servlet-name>PicturePusher</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+		<!-- Registriere Jersey-Konfiguration, in welcher Webservices, ExceptionMapper, 
+			etc definiert sind--> 
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>de.bach.thwildau.pusher.controller.SSEApplication</param-value>
+		</init-param>
+		<!-- Registriere alle selbst geschriebene Filter, Interceptors, ... -->
+		<!-- <init-param> <param-name>jersey.config.server.provider.classnames</param-name> 
+			<param-value>de.fraunhofer.fokus.wind.rest.PatchReader, de.fraunhofer.fokus.wind.rest.OptionsAcceptHeader</param-value> 
+			<param-value>de.fraunhofer.fokus.wind.rest.OptionsAcceptHeader</param-value> 
+			</init-param> -->
+
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>
+       				de.bach.thwildau.pusher.controller
+    </param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.scanning.recursive</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PicturePusher</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+</web-app>
