@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.inject.Singleton;
@@ -37,21 +38,19 @@ public class Pusher {
 		return "I'am ready!";
 	}
 
-	@POST
+	@GET
 	@Path("/push")
 	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.TEXT_PLAIN)
-	public String broadcastMessage(String message) {
+	public String broadcastMessage() {
 		
-		String msg = message.split("/")[3];
-		
+		String message = UUID.randomUUID().toString();
 		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
 		OutboundEvent event = eventBuilder.name("message").mediaType(MediaType.TEXT_PLAIN_TYPE)
-				.data(String.class, msg).build();
+				.data(String.class, message).build();
 
 		broadcaster.broadcast(event);
 
-		return "Message '" + msg + "' has been broadcast.\n";
+		return "Image '" + message + "' has been broadcast.\n";
 	}
 
 	@GET
