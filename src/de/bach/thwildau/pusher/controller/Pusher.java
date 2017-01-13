@@ -29,7 +29,7 @@ public class Pusher {
 
 	private SseBroadcaster broadcaster = new SseBroadcaster();
 
-	private static final String WEBCAM_IMAGE_DIRECTORY = "/srv/motion/";
+	private static final String WEBCAM_IMAGE_DIRECTORY = "/var/www/www/media/";
 
 	@GET
 	@Path("/test")
@@ -38,19 +38,27 @@ public class Pusher {
 		return "I'am ready!";
 	}
 
-	@GET
+	@POST
 	@Path("/push")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String broadcastMessage() {
+	@Consumes(MediaType.TEXT_PLAIN)
+	public String broadcastMessage(String fileName) {
 		
-		String message = UUID.randomUUID().toString();
+		String msg = fileName.split("/")[5];
+		
+		if(msg.endsWith(".jpg")){
+		
 		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
 		OutboundEvent event = eventBuilder.name("message").mediaType(MediaType.TEXT_PLAIN_TYPE)
-				.data(String.class, message).build();
+				.data(String.class, msg).build();
 
 		broadcaster.broadcast(event);
+		return "Image '" + msg + "' has been broadcast.\n";
+		} else {
+			return "The File: "+msg+" is not supported!";
+		}
 
-		return "Image '" + message + "' has been broadcast.\n";
+	
 	}
 
 	@GET
@@ -76,8 +84,7 @@ public class Pusher {
 			image = ImageIO.read(file);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(image, "png", baos);
-			imageData = baos.toByteArray();
-			
+			imageData = baos.toByteArray();	
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Response.status(Status.BAD_REQUEST).build();
