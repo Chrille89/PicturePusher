@@ -2,7 +2,7 @@
     <wb-module deploy-name="PicturePusher">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="PicturePusher"/>
         <property name="java-output-path" value="/PicturePusher/build/classes"/>
+        <property name="context-root" value="PicturePusher"/>
     </wb-module>
 </project-modules>

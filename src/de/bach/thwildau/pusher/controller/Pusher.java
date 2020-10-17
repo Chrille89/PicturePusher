@@ -38,11 +38,42 @@ public class Pusher {
 		return "I'am ready!";
 	}
 
+
+	@POST
+	@Path("/audiobroadcast/push")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String broadcastAudioLevelAsJson(String audioLevelAsJson) {
+		
+		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+		OutboundEvent event = eventBuilder.name("message").mediaType(MediaType.TEXT_PLAIN_TYPE)
+				.data(String.class, audioLevelAsJson).build();
+
+		broadcaster.broadcast(event);
+		return audioLevelAsJson;
+	}
+	
 	@POST
 	@Path("/push")
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String broadcastMessage(String fileName) {
+	public String broadcastTextMessage(String fileName) {
+		
+		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+		OutboundEvent event = eventBuilder.name("message").mediaType(MediaType.TEXT_PLAIN_TYPE)
+				.data(String.class, fileName).build();
+
+		broadcaster.broadcast(event);
+		return fileName + "' has been broadcast.\n";
+	}
+	
+	
+	
+	@POST
+	@Path("/imagefilenamebroadcast/push")
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.TEXT_PLAIN)
+	public String broadcastImageFileName(String fileName) {
 		
 		String msg = fileName.split("/")[5];
 		
